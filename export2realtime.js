@@ -79,30 +79,30 @@ function makerealtime() {
   let f36=String(getState('javascript.1.Wetterdaten.Statistik.Luftdruck.max_std').val);		  		// 36. time of today's high pressure (hh:mm)
   let f37=String(getState('javascript.1.Wetterdaten.Statistik.Luftdruck.min').val);							// 37. today's low pressure
   let f38=String(getState('javascript.1.Wetterdaten.Statistik.Luftdruck.min_std').val);					// 38. time of today's low pressure (hh:mm)
-  let f39='1.8.7';																									// 39. Cumulus Versions (the specific version in use)
-  let f40='819';																										// 40. Cumulus build number
-  let f41='0.0';																										// 41. 10-minute high gust
+  let f39='1.8.7';																									            // 39. Cumulus Versions (the specific version in use)
+  let f40='819';																										            // 40. Cumulus build number
+  let f41='0.0';																										            // 41. 10-minute high gust
   let f42=String(getState('javascript.1.Wetterdaten.Statistik.Temperatur.heatindex').val);			// 42. Heat index
-  let f43='0.0';																										// 43. Humidex
-  let f44=String(getState('hm-rega.0.1494').val);														// 44. UV Index
+  let f43='0.0';																										            // 43. Humidex
+  let f44=String(getState('hm-rega.0.1494').val);														    // 44. UV Index
   let f45=String(getState('javascript.1.Wetterdaten.Statistik.Temperatur.humidex').val);				// 45. evapotranspiration today
-  let f46='0.0';																										// 46. solar radiation W/m2
-  let f47='0.0';																										// 47. 10-minute average wind bearing (degrees)
-  let f48=String(getState('hm-rega.0.1485').val);														// 48. rainfall last hour - w_regen_letzte_h
-  let f49='0.0';																										// 49. The number of the current (Zambretti) forecast as per Strings.ini.
-  if (getState('hm-rega.0.1476').val >= 25) {																				// 50. Flag to indicate that the location of the station is currently in daylight (1 = yes, 0 = No)
+  let f46=String(getState('hm-rega.0.1652').val);																// 46. solar radiation W/m2
+  let f47='0.0';																             										// 47. 10-minute average wind bearing (degrees)
+  let f48=String(getState('hm-rega.0.1485').val);						    								// 48. rainfall last hour - w_regen_letzte_h
+  let f49='0.0';																								            		// 49. The number of the current (Zambretti) forecast as per Strings.ini.
+  if (getState('hm-rega.0.1476').val >= 25) {																		// 50. Flag to indicate that the location of the station is currently in daylight (1 = yes, 0 = No)
     var f50='1';
   } else {
     var f50='0';
   }
-  let f51='0';																										// 51. If the station has lost contact with its remote sensors 'Fine Offset only', a Flag number is given (1 = Yes, 0 = No)
-  let f52='N';																										  // 52. Average wind direction
-  let f53='0.0';																										// 53. Cloud base
-  let f54='0.0';																										// 54. Cloud base units
-  let f55='0.0';																										// 55. Apparent temperature
-  let f56=String(String(getState('hm-rega.0.1492').val) + ' ');														// 56. Sunshine hours so far today - w_sonnenstunden_heute
-  let f57= '0';																										// 57. Current theoretical max solar radiation
-  if (getState('hm-rega.0.1482').val == true) {																			// 58. Is it sunny? 1 if the sun is shining, otherwise 0 - w_sonne_scheint
+  let f51='0';																										              // 51. If the station has lost contact with its remote sensors 'Fine Offset only', a Flag number is given (1 = Yes, 0 = No)
+  let f52='N';																										              // 52. Average wind direction
+  let f53='0.0';																										            // 53. Cloud base
+  let f54='0.0';																										            // 54. Cloud base units
+  let f55='0.0';																										            // 55. Apparent temperature
+  let f56=String(String(getState('hm-rega.0.1492').val) + ' ');									// 56. Sunshine hours so far today - w_sonnenstunden_heute
+  let f57= '0';																										              // 57. Current theoretical max solar radiation
+  if (getState('hm-rega.0.1482').val == true) {																	// 58. Is it sunny? 1 if the sun is shining, otherwise 0 - w_sonne_scheint
     var f58='1';
   } else {
     var f58='0';
