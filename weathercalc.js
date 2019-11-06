@@ -4,6 +4,7 @@
 
   01.11.2019:   V0.0.1  Initialrelease (quick&ditry)
   06.11.2019:   v0.1.0  Code funktional überarbeitet
+  06.11.2019:   v0.1.1  Berechnung Solar Radiation hinzugefüget
 
   todo:
     erweitertes Logging integrieren
@@ -69,13 +70,16 @@ const DP_TEMP_GEF             = PATH_STATISTIK + 'Temperatur.apparent_temp';
 const DP_TEMP_HI              = PATH_STATISTIK + 'Temperatur.heatindex';
 const DP_TEMP_HUI             = PATH_STATISTIK + 'Temperatur.humidex';
 
-const DP_T = 'hm-rega.0.1467';
-const DP_F = 'hm-rega.0.1468';
-const DP_W = 'hm-rega.0.1470';
-const DP_B = 'hm-rega.0.1469';
-const DP_D = 'hm-rega.0.1475';
-const DP_R = "hm-rega.0.1486";
-const DP_G = "hm-rega.0.1471";
+const DP_T                    = 'hm-rega.0.1467';
+const DP_F                    = 'hm-rega.0.1468';
+const DP_W                    = 'hm-rega.0.1470';
+const DP_B                    = 'hm-rega.0.1469';
+const DP_D                    = 'hm-rega.0.1475';
+const DP_R                    = 'hm-rega.0.1486';
+const DP_G                    = 'hm-rega.0.1471';
+const DP_SDT                  = 'hm-rega.0.1488';
+const DP_SDM                  = 'hm-rega.0.1653';
+const DP_SR                   = 'hm-rega.0.1652';
 /**
   ##########         Datenpunkte          ##########
 **/
@@ -485,6 +489,22 @@ function temptrend() {
 }
 
 /*
+ *  Sonnen-Radiation errechnen
+ */
+function sollarradiation() {
+  let sdt = getState(DP_SDT).val;
+  let sdm = sdt - (sdt * 0.3);
+
+  let sr = (sdm - 3) * 30;
+  if (sr < 0) sr = sr * -1;
+  if (LOGGING) console.log('Weathercalc: Solar Radiation=' + sr);
+  setState(DP_SR, sr);
+}
+
+
+
+
+/*
  * Ermittle den Hitzeindes (heat index) und den Humidex
  * Hitzeindex: HI = -8.784695 + 1.61139411*T + 2.338549*F - 0.14611605*T*F - 0.012308094*T2 - 0.016424828*F² + 0.002211732*T²*F + 0.00072546*T*F² - 0.000003582*T²*F²
  * HI = Hitzeindex in °C, T = Temperatur in °C, F = relative Luftfeuchtigkeitr in %
@@ -520,46 +540,46 @@ function temptrend() {
   * Erfasse die gemessene heutige Höchst- und Niedrigwerte für:
   * Temperatur (min/max), Windgeschwinmdigkeit (max), Windböe (max), Luftdruck (min/max)
   */
- on({id: DP_T, change: "gt"}, function (obj) {
+ on({id: DP_T, change: 'gt'}, function (obj) {
    if (getState(DP_TEMP_MAX).val <= getState(DP_T).val) {
      setState(DP_TEMP_MAX, getState(DP_T).val);
-     setState(DP_TEMP_MAX_ZEIT, formatDate(getDateObject(getState(DP_T).ts), "SS:mm"));
-     if (LOGGING) console.log('Weathercalc: Neue maximal Temperatur heute=' + DP_T + ' um ' + formatDate(getDateObject(getState(DP_T).ts), "SS:mm"));
+     setState(DP_TEMP_MAX_ZEIT, formatDate(getDateObject(getState(DP_T).ts), 'SS:mm'));
+     if (LOGGING) console.log('Weathercalc: Neue maximal Temperatur heute=' + DP_T + ' um ' + formatDate(getDateObject(getState(DP_T).ts), 'SS:mm'));
    }
  });
- on({id: DP_T, change: "lt"}, function (obj) {
+ on({id: DP_T, change: 'lt'}, function (obj) {
    if (getState(DP_TEMP_MIN).val >= getState(DP_T).val) {
      setState(DP_TEMP_MIN, getState(DP_T).val);
-     setState(DP_TEMP_MIN_ZEIT, formatDate(getDateObject(getState(DP_T).ts), "SS:mm"));
-     if (LOGGING) console.log('Weathercalc: Neue minimal Temperatur heute=' + DP_T + ' um ' + formatDate(getDateObject(getState(DP_T).ts), "SS:mm"));
+     setState(DP_TEMP_MIN_ZEIT, formatDate(getDateObject(getState(DP_T).ts), 'SS:mm'));
+     if (LOGGING) console.log('Weathercalc: Neue minimal Temperatur heute=' + DP_T + ' um ' + formatDate(getDateObject(getState(DP_T).ts), 'SS:mm'));
    }
  });
- on({id: DP_B, change: "gt"}, function (obj) {
+ on({id: DP_B, change: 'gt'}, function (obj) {
    if (getState(DP_BARO_MAX).val <= getState(DP_B).val) {
      setState(DP_BARO_MAX, getState(DP_B).val);
-     setState(DP_BARO_MAX_ZEIT, formatDate(getDateObject(getState(DP_B).ts), "SS:mm"));
-     if (LOGGING) console.log('Weathercalc: Neuer maximaler Luftdruck heute=' + DP_B + ' um ' + formatDate(getDateObject(getState(DP_B).ts), "SS:mm"));
+     setState(DP_BARO_MAX_ZEIT, formatDate(getDateObject(getState(DP_B).ts), 'SS:mm'));
+     if (LOGGING) console.log('Weathercalc: Neuer maximaler Luftdruck heute=' + DP_B + ' um ' + formatDate(getDateObject(getState(DP_B).ts), 'SS:mm'));
    }
  });
- on({id: DP_B, change: "lt"}, function (obj) {
+ on({id: DP_B, change: 'lt'}, function (obj) {
    if (getState(DP_BARO_MIN).val >= getState(DP_B).val) {
      setState(DP_BARO_MIN, getState(DP_B).val);
-     setState(DP_BARO_MIN_ZEIT, formatDate(getDateObject(getState(DP_B).ts), "SS:mm"));
-     if (LOGGING) console.log('Weathercalc: Neuer minimaler Luftdruck heute=' + DP_B + ' um ' + formatDate(getDateObject(getState(DP_B).ts), "SS:mm"));
+     setState(DP_BARO_MIN_ZEIT, formatDate(getDateObject(getState(DP_B).ts), 'SS:mm'));
+     if (LOGGING) console.log('Weathercalc: Neuer minimaler Luftdruck heute=' + DP_B + ' um ' + formatDate(getDateObject(getState(DP_B).ts), 'SS:mm'));
    }
  });
- on({id: DP_W, change: "gt"}, function (obj) {
+ on({id: DP_W, change: 'gt'}, function (obj) {
    if (getState(DP_WIND_MAX).val <= getState(DP_W).val) {
      setState(DP_WIND_MAX, getState(DP_W).val);
-     setState(DP_WIND_MAX_ZEIT, formatDate(getDateObject(getState(DP_W).ts), "SS:mm"));
-     if (LOGGING) console.log('Weathercalc: Neue maximale Windgeschwindigkeit heute=' + DP_W + ' um ' + formatDate(getDateObject(getState(DP_W).ts), "SS:mm"));
+     setState(DP_WIND_MAX_ZEIT, formatDate(getDateObject(getState(DP_W).ts), 'SS:mm'));
+     if (LOGGING) console.log('Weathercalc: Neue maximale Windgeschwindigkeit heute=' + DP_W + ' um ' + formatDate(getDateObject(getState(DP_W).ts), 'SS:mm'));
    }
  });
- on({id: DP_G, change: "gt"}, function (obj) {
+ on({id: DP_G, change: 'gt'}, function (obj) {
    if (getState(DP_GUST_MAX).val <= getState(DP_G).val) {
      setState(DP_GUST_MAX, getState(DP_G).val);
-     setState(DP_GUST_MAX_ZEIT, formatDate(getDateObject(getState(DP_G).ts), "SS:mm"));
-     if (LOGGING) console.log('Weathercalc: Neue maximale Böengeschwindigkeit heute=' + DP_G + ' um ' + formatDate(getDateObject(getState(DP_W).ts), "SS:mm"));
+     setState(DP_GUST_MAX_ZEIT, formatDate(getDateObject(getState(DP_G).ts), 'SS:mm'));
+     if (LOGGING) console.log('Weathercalc: Neue maximale Böengeschwindigkeit heute=' + DP_G + ' um ' + formatDate(getDateObject(getState(DP_W).ts), 'SS:mm'));
    }
  });
 
@@ -583,6 +603,7 @@ function temptrend() {
     setState(DP_TEMP_HUI, hui);
     barotrend();
     temptrend();
+    sollarradiation();
     if (LOGGING) console.log('Weathercalc: Cron durchlaufen');
   });
 
@@ -622,7 +643,7 @@ schedule('0 * * * *', function () {
  /*
   * Am Tagesende Daten zurücksetzen
   */
- schedule("59 23 * * *", function () {
+ schedule('59 23 * * *', function () {
    setState(DP_TEMP_MAX, -50);
    setState(DP_TEMP_MAX_ZEIT, '00:00');
    setState(DP_TEMP_MIN, 50);
@@ -641,7 +662,7 @@ schedule('0 * * * *', function () {
  /*
   * Berechnen der monatlichen und jährlichen Regenmenge
   */
- schedule("59 23 * * *", function () {
+ schedule('59 23 * * *', function () {
    let regenmonatlich = getState(DP_REGEN_MONAT).val + getState(DP_R).val;
    let regenjaehrlich = getState(DP_REGEN_JAHR).val + getState(DP_R).val;
    setState(DP_REGEN_MONAT, regenmonatlich);
@@ -650,12 +671,12 @@ schedule('0 * * * *', function () {
    if (LOGGING) console.log('Weathercalc: Neuer Wert für jährliche Regenmenge=' + regenjaehrlich);
  });
 
- schedule("0 0 1 * *", function () {
+ schedule('0 0 1 * *', function () {
    setState(DP_REGEN_MONAT, 0);
    if (LOGGING) console.log('Weathercalc: Wert für monatliche Regenmenge zum Ende des aktuellen Monats gelöscht');
  });
 
- schedule("0 0 1 1 *", function () {
+ schedule('0 0 1 1 *', function () {
    setState(DP_REGEN_JAHR, 0);
    if (LOGGING) console.log('Weathercalc: Wert für jährliche Regenmenge zum Ende des aktuellen Jahres gelöscht');
  });
@@ -676,5 +697,6 @@ let timeout = setTimeout(function () {
   setState(DP_TEMP_HUI, hui);
   barotrend();
   temptrend();
+  sollarradiation();
   if (LOGGING) console.log('Weathercalc: Scriptaufruf zum Scriptstart');
 }, 5000);
