@@ -79,7 +79,7 @@ const DP_G = "hm-rega.0.1471";
 /**
   ##########         Datenpunkte          ##########
 **/
-if (isState(DP_BAROTREND_DATA) == false) {
+if (isState(DP_REGEN_JAHR) == false) {
   if (LOGGING) console.log('Weathercalc: Datenpunkte werden angelegt');
   /*
    * DP für Barometertrend erstellen
@@ -334,6 +334,30 @@ if (isState(DP_BAROTREND_DATA) == false) {
       'min': 0,
       'max': 100,
       'def': 0,
+    });
+    createState(DP_REGEN_MONAT, {
+      'name': 'Regen monatlich',
+      'desc': 'Die gesamte Regenmenge im aktuellen Monat',
+      'type': 'number',
+      'read': true,
+      'write': true,
+      'role': 'value',
+      'min': 0,
+      'max': 1500,
+      'def': 0,
+       'unit': 'mm',
+    });
+    createState(DP_REGEN_JAHR, {
+      'name': 'Regen monatlich',
+      'desc': 'Die gesamte Regenmenge im aktuellen Monat',
+      'type': 'number',
+      'read': true,
+      'write': true,
+      'role': 'value',
+      'min': 0,
+      'max': 10000,
+      'def': 0,
+       'unit': 'mm',
     });
     let timeout = setTimeout(function () {
       /*
