@@ -17,9 +17,10 @@
   ##########         Variablen          ##########
 **/
 const s_realtime = '';                                                          // Inhalt der realtime.txt Datei
-const FTP_USER = 'iobroker';
-const FTP_PASSWD = 'Trustno1';
-const FTP_HOST = 'gugelitze.de/';
+const FTP_USER = '';
+const FTP_PASSWD = '';
+const FTP_HOST = '';
+const FTP_PATH = '';
 var fs = require('fs');
 
 /**
@@ -114,7 +115,7 @@ function makerealtime() {
       console.log('Datei geschrieben');
    });   //schreibt in iobroker system
 
-   let s_ftp = 'wput ' + PATH2RT + ' ftp://' + FTP_USER + ':' + FTP_PASSWD + '@' + FTP_HOST + 'realtime.txt';
+   let s_ftp = 'wput ' + PATH2RT + ' ftp://' + FTP_USER + ':' + FTP_PASSWD + '@' + FTP_HOST + FTP_PATH + '/realtime.txt';
    exec(s_ftp, function (error, result, stderr) {
          console.log(result);
    });

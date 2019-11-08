@@ -21,8 +21,8 @@ var CRON                      = 5;                                              
 var LOGGING                   = true;                                           // Ausgabe in Console-Log
 var request                   = require('request');
 
-var PWS_ID                    = "IUNTER31";                                     // ID der PWS Station
-var PWS_PW                    = "hZzmbLZa";                                     // Passwort der PWS SHtation
+var PWS_ID                    = '';                                     // ID der PWS Station
+var PWS_PW                    = '';                                     // Passwort der PWS SHtation
 var PWS_ACT                   = 'action=updateraw';                             // Updatebefehl für PWS_ID
 
 const DP_T                    = 'hm-rega.0.1467';
