@@ -5,6 +5,7 @@
 
   01.11.2019:   V0.0.1  Initialrelease (quick&ditry)
   06.11.2019:   v0.1.0  Code funktional überarbeitet
+  11.11.2019:   V0.1.1  Datenpunkt UV Index angepasst
 
   to do:
 
@@ -85,7 +86,7 @@ function makerealtime() {
   let f41='0.0';																										            // 41. 10-minute high gust
   let f42=String(getState('javascript.1.Wetterdaten.Statistik.Temperatur.heatindex').val);			// 42. Heat index
   let f43='0.0';																										            // 43. Humidex
-  let f44=String(getState('hm-rega.0.1494').val);														    // 44. UV Index
+  let f44=String(getState('openuv.0.UV').val);							  							    // 44. UV Index
   let f45=String(getState('javascript.1.Wetterdaten.Statistik.Temperatur.humidex').val);				// 45. evapotranspiration today
   let f46=String(getState('hm-rega.0.1652').val);																// 46. solar radiation W/m2
   let f47='0.0';																             										// 47. 10-minute average wind bearing (degrees)
