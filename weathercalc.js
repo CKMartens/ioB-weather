@@ -5,7 +5,8 @@
   01.11.2019:   V0.0.1  Initialrelease (quick&ditry)
   06.11.2019:   v0.1.0  Code funktional überarbeitet
   06.11.2019:   v0.1.1  Berechnung Solar Radiation hinzugefüget
-
+  11.11.2019:   V0.1.2  Berechnung UV Index hinzugefüget
+  
   todo:
     erweitertes Logging integrieren
 
@@ -35,6 +36,7 @@ const PATH                    = JSPATH + 'Wetterdaten.';
 const PATH_BAROTREND          = PATH + 'Luftdruck.Barotrend.';
 const PATH_TEMPTREND          = PATH + 'Temperatur.Temptrend.';
 const PATH_STATISTIK          = PATH + 'Statistik.';
+const PATH_SOLARDATEN         = PATH + 'Solardaten.';
 
 const DP_BAROTREND_DATA       = PATH_BAROTREND + 'baro_data';
 const DP_BAROTREND_TREND      = PATH_BAROTREND + 'baro_trend';
@@ -70,6 +72,8 @@ const DP_TEMP_GEF             = PATH_STATISTIK + 'Temperatur.apparent_temp';
 const DP_TEMP_HI              = PATH_STATISTIK + 'Temperatur.heatindex';
 const DP_TEMP_HUI             = PATH_STATISTIK + 'Temperatur.humidex';
 
+const DP_UV_INDEX             = PATH_SOLARDATEN + 'UV_Index';
+
 const DP_T                    = 'hm-rega.0.1467';
 const DP_F                    = 'hm-rega.0.1468';
 const DP_W                    = 'hm-rega.0.1470';
@@ -80,6 +84,8 @@ const DP_G                    = 'hm-rega.0.1471';
 const DP_SDT                  = 'hm-rega.0.1488';
 const DP_SDM                  = 'hm-rega.0.1653';
 const DP_SR                   = 'hm-rega.0.1652';
+const DP_UV                   = 'hm-rega.0.1494';
+
 /**
   ##########         Datenpunkte          ##########
 **/
@@ -363,6 +369,17 @@ if (isState(DP_REGEN_JAHR) == false) {
       'def': 0,
        'unit': 'mm',
     });
+    createState(DP_UV_INDEX, {
+      'name': 'UV Index',
+      'desc': 'Der aktuelle UV Index',
+      'type': 'number',
+      'read': true,
+      'write': true,
+      'role': 'value',
+      'min': 0,
+      'max': 100,
+      'def': 0,
+    });
     let timeout = setTimeout(function () {
       /*
        * Leere Daten für Barotrend füllen
@@ -495,14 +512,13 @@ function sollarradiation() {
   let sdt = getState(DP_SDT).val;
   let sdm = sdt - (sdt * 0.3);
 
-  let sr = (sdm - 3) * 30;
+  let sr = Math.round((sdm - 3) * 30);
   if (sr < 0) sr = sr * -1;
+
   if (LOGGING) console.log('Weathercalc: Solar Radiation=' + sr);
+
   setState(DP_SR, sr);
 }
-
-
-
 
 /*
  * Ermittle den Hitzeindes (heat index) und den Humidex
@@ -531,6 +547,18 @@ function sollarradiation() {
    if (LOGGING) console.log('Weathercalc: Humidex=' + hui);
 
    return  hui;
+ }
+
+/*
+ * Umrechnung des Wertes des Sensors in den UV Index
+ */
+ function uvindex(uvvalue) {
+   let ref = 0.4;                                                               // Referenzwert 0,01 W/m^2 ist äquivalent zu 0,4 als UV index
+   let uvi = Math.round(((ref * (uvvalue * 5.625) / 1000) * 100) /100);
+
+   if (LOGGING) console.log('Weathercalc: UV Index=' + uvi);
+
+   return uvi;
  }
 
  /**
@@ -595,9 +623,12 @@ function sollarradiation() {
     let f = getState(DP_F).val;
     let w = getState(DP_W).val;
     let d = getState(DP_D).val;
+    let uv = getState(DP_UV).val;
     let t_gef = apparent_temp(t, f, w);
     let hi =  Math.round((heatindex(t, f) * 100)/100);
     let hui = Math.round((humidex(t, d) * 100)/100);
+    let uvi = uvindex(uv);
+    setState(DP_UV_INDEX, uvi);
     setState(DP_TEMP_GEF, t_gef);
     setState(DP_TEMP_HI, hi);
     setState(DP_TEMP_HUI, hui);
@@ -689,9 +720,12 @@ let timeout = setTimeout(function () {
   let f = getState(DP_F).val;
   let w = getState(DP_W).val;
   let d = getState(DP_D).val;
+  let uv = getState(DP_UV).val;
   let t_gef = apparent_temp(t, f, w);
-  let hi =  heatindex(t, f);
-  let hui = humidex(t, d);
+  let hi =  Math.round((heatindex(t, f) * 100)/100);
+  let hui = Math.round((humidex(t, d) * 100)/100);
+  let uvi = uvindex(uv);
+  setState(DP_UV_INDEX, uvi);
   setState(DP_TEMP_GEF, t_gef);
   setState(DP_TEMP_HI, hi);
   setState(DP_TEMP_HUI, hui);
