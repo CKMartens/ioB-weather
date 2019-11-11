@@ -5,6 +5,7 @@
 
   01.11.2019:   V0.0.1  Initialrelease (quick&ditry)
   06.11.2019:   v0.1.0  Code funktional überarbeitet
+  11.11.2019:   V0.1.1  Datenpunkt UV Index angepasst
 
   todo:
 
@@ -34,7 +35,7 @@ const DP_D                    = 'hm-rega.0.1475';
 const DP_RD                   = 'hm-rega.0.1486';
 const DP_RN                   = 'hm-rega.0.1485';
 const DP_G                    = 'hm-rega.0.1471';
-const DP_UV                   = 'openuv.0.UV';
+const DP_UV                   = 'javascript.1.Wetterdaten.Solardaten.UV_Index';
 const DP_SR                   = 'hm-rega.0.1652';
 const DP_PM10                 = 'luftdaten.0.192_168_178_81.SDS_P1';
 const DP_PM25                 = 'luftdaten.0.192_168_178_81.SDS_P2';
